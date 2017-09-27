@@ -1,0 +1,20 @@
+<?php
+/**
+ * @file drupal_cd.install
+ * Install, update and uninstall functions for the drupal_cd module.
+ * Further reading: https://www.drupal.org/docs/7/creating-custom-modules/howtos/examples-for-database-update-scripts-using-hook_update_n-how
+ */
+/**
+ * Install hook that calls update hooks. This ensures an up-to-date install
+ * fresh on each install.
+ * Inspired from. http://blog.dcycle.com/blog/46/continuous-deployment-drupal-style/
+ *
+*/
+function drupal_cd_install() {
+  for ($i = 7001; $i < 8000; $i++) {
+    $candidate = 'drupal_cd_update_' . $i;
+    if (function_exists($candidate)) {
+      $candidate();
+    }
+  }
+}

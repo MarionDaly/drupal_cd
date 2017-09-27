@@ -1,0 +1,80 @@
+<?php
+/**
+ * @file drupal_cd.module
+ * Code for the Drupal Continious Delivery Module.
+ *
+ */
+/**
+ * Mass create menus with $menus array.
+ *
+ */
+function drupal_cd_create_menu($menus) {
+  foreach ($menus as $menu) {
+    menu_save($menu);
+  }
+}
+/**
+ * Delete a menu.
+ *
+ */
+function drupal_cd_delete_menu($menu_name) {
+  menu_delete_links($menu_name);
+}
+/**
+ * Mass insert menu links with $links array.
+ *
+ */
+function drupal_cd_create_menu_link($links) {
+  foreach ($links as $link) {
+    $item = array(
+      'link_path' => $link['link_path'],
+      'link_title' => $link['link_title'],
+      'menu_name' => $link['menu_name'],
+      'weight' => $link['weight'],
+      'expanded' => $link['expanded'],
+    );
+    menu_link_save($item);
+  }
+}
+/**
+ * Create node with $input array.
+ *
+ */
+function drupal_cd_create_node($input) {
+  $node = new stdClass();
+  $node->type = $input['type'];
+  $node->title = $input['title'];
+  $node->language = LANGUAGE_NONE;
+  $node->status = $input['publish'];
+  $node->path = array('alias' => $input['path']);
+  node_object_prepare($node);
+  $node->uid = 1;
+  $node->body[$node->language][0]['value'] = $input['body'];
+  $node->body[$node->language][0]['summary'] = $input['summary'];
+  $node->body[$node->language][0]['format'] = $input['format'];
+  $node = node_submit($node);
+  node_save($node);
+}
+/**
+ * Create panel node with $input array.
+ *
+ */
+function drupal_cd_create_panel_node($input) {
+  $node = new stdClass();
+  $node->title = t($input['title']);
+  $node->type = 'panel';
+  $node->path = array('alias' => $input['path']);
+  node_object_prepare($node);
+  $node->language = LANGUAGE_NONE;
+  $node->status = $input['publish'];
+  $node->promote = 0;
+  $node->comment = 0;
+  $node->uid = 1;
+  $node->panels_node = array(
+      'layout' => $input['layout'],
+      'css_id' => NULL,
+      'pipeline' => 'ipe',
+  );
+  $node = node_submit($node);
+  node_save($node);
+}

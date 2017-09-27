@@ -1,0 +1,13 @@
+name = "Drupal CD"
+description = "Deployment module to ensure proper continious delivery procedures."
+core = 7.x
+version = 7.x-1.0
+dependencies[] = features
+dependencies[] = fe_block
+dependencies[] = context
+dependencies[] = strongarm
+
+files[] = tests/drupal_cd_test_case.test
+
+files[] = drupal_cd.module
+files[] = drupal_cd.install

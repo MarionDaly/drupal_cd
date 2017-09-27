@@ -1,0 +1,82 @@
+<?php
+/**
+ * @file
+ * Base class for Drupal CD tests.
+ */
+class DrupalCDTestCase extends DrupalWebTestCase {
+  public static function getInfo() {
+    return array(
+      'name' => 'Drupal CD Test Case',
+      'description' => 'Tests to ensure proper functionality of Drupal CD module.',
+      'group' => 'Drupal CD',
+    );
+  }
+  /**
+  * Tests drupal_cd_create_node helper function.
+  */
+  public function testNodeCreate() {
+    $node = array (
+      "type" => "page",
+      "title" => "test page",
+      "path" => "testpage12345",
+      "body" => "test page body",
+      "summary" => "test summary",
+      "format" => "full_html",
+      "publish" => 1
+    );
+    drupal_cd_create_node($node);
+    $this->drupalGet("testpage12345");
+    $this->assertResponse(200, 'Created page exists.');
+    $this->assertText("test page body", "Found the body text of page");
+  }
+  /**
+  * Tests drupal_cd_create_panel_node helper function.
+  */
+  public function testPanelNodeCreate() {
+    $node = array (
+      "title" => "test panel",
+      "path" => "testpanel12345",
+      "publish" => 1,
+      "layout" => "twocol_gp_l1"
+    );
+    drupal_cd_create_panel_node($node);
+    $this->drupalGet("testpanel12345");
+    $this->assertResponse(200, 'Created panel page exists.');  }
+  /**
+  * Tests drupal_cd_create_menu helper function.
+  */
+  public function testMenuCreate() {
+    $menus = array(
+      array(
+        'menu_name' => 'menu_test_case',
+        'title' => 'Test Menu',
+        'description' => 'test menu description',
+      ),
+    );
+    drupal_cd_create_menu($menus);
+    if(menu_load('menu_test_case')) {
+      $menu_exists = TRUE;
+    }
+    else {
+      $menu_exists = FALSE;
+    }
+    $this->assertEqual($menu_exists, TRUE, 'Menu was created.');
+  }
+  /**
+  * Tests drupal_cd_create_menu_link helper function.
+  */
+  public function testMenuLinkCreate() {
+    $links = array(
+      array(
+          'link_title' => 'Link1',
+          'link_path' => 'http://example.com/link1',
+          'menu_name' => 'main-menu',
+          'weight' => 0,
+          'expanded' => 0,
+        ),
+    );
+    drupal_cd_create_menu_link($links);
+    $this->drupalGet("<front>");
+    $this->assertRaw('http://example.com/link1', 'Link attached to main menu.');
+  }
+}
