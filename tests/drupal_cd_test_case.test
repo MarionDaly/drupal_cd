@@ -15,7 +15,7 @@ class DrupalCDTestCase extends DrupalWebTestCase {
   * Tests drupal_cd_create_node helper function.
   */
   public function testNodeCreate() {
-    $node = array (
+    $node = array(
       "type" => "page",
       "title" => "test page",
       "path" => "testpage12345",
@@ -33,7 +33,7 @@ class DrupalCDTestCase extends DrupalWebTestCase {
   * Tests drupal_cd_create_panel_node helper function.
   */
   public function testPanelNodeCreate() {
-    $node = array (
+    $node = array(
       "title" => "test panel",
       "path" => "testpanel12345",
       "publish" => 1,
@@ -54,7 +54,7 @@ class DrupalCDTestCase extends DrupalWebTestCase {
       ),
     );
     drupal_cd_create_menu($menus);
-    if(menu_load('menu_test_case')) {
+    if (menu_load('menu_test_case')) {
       $menu_exists = TRUE;
     }
     else {
